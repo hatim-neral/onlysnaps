@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="onlysnaps is a single-serve snap pack that opens with one hand. Fold it in half and it pours cold brew, masala chai or iced tea.">
+<meta property="og:title" content="onlysnaps">
+<meta property="og:description" content="Don't tear. Just snap. Single-serve shots of cold brew, masala chai and iced tea.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 24'%3E%3Crect width='34' height='24' rx='6' fill='%23B9A2FF'/%3E%3Cpath d='M17 3v18' stroke='%230E0E10' stroke-width='2' stroke-dasharray='3 3'/%3E%3C/svg%3E">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>onlysnaps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Outfit:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one loud cobalt-and-ice brand world (cold brew = cold), espresso and crema for the coffee itself; big type, a looping snap-and-pour hero, bands that alternate ice / cobalt / espresso */
+:root{
+  --ice:#E6E7EA; --milk:#F8F8F9; --cobalt:#B9A2FF; --cobalt-deep:#9C84F0; --onp:#0E0E10;
+  --espresso:#0E0E10; --crema:#9BEA5C; --ink:#0E0E10; --mute:#5A5C63; --line:#CBCDD3; --hl:#6747E8;
+  --f-display:"Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-body:"Outfit", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--ice);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--ice)}
+.in{max-width:1180px;margin:0 auto;padding-left:max(18px, env(safe-area-inset-left,0px));padding-right:max(18px, env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-0.02em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--crema);outline-offset:3px;border-radius:6px}
+.mono{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:.9rem;text-decoration:none;padding:15px 24px;border-radius:999px;border:2px solid var(--ink);background:var(--ink);color:var(--milk);cursor:pointer;transition:transform .2s ease, background .2s, color .2s}
+.btn:hover{transform:translateY(-2px) rotate(-1deg)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--milk)}
+.btn.crema{background:var(--crema);border-color:var(--crema);color:var(--espresso)}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ice) 88%,transparent);backdrop-filter:blur(10px)}
+header.top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:800;font-size:1.35rem;letter-spacing:-0.03em}
+.logo .mark{width:26px;height:34px;border-radius:7px;background:var(--cobalt);position:relative;transform:rotate(-8deg)}
+.logo .mark::after{content:"";position:absolute;left:3px;right:3px;top:50%;border-top:2px dashed var(--milk)}
+.logo b{color:var(--hl);font-weight:800}
+nav.links{display:flex;gap:6px}
+nav.links a{text-decoration:none;font-weight:600;font-size:.95rem;padding:8px 14px;border-radius:999px}
+nav.links a:hover{background:var(--milk)}
+header .btn{padding:11px 18px;font-size:.8rem}
+
+/* hero */
+.hero{position:relative;overflow:hidden}
+.hero .in{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center;padding-block:40px 70px;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.6rem,6.4vw,5.6rem);font-weight:900}
+.hero h1 .w{display:inline-block;animation:pop .8s cubic-bezier(.2,1.6,.4,1) both}
+.hero h1 .w:nth-child(2){animation-delay:.12s}.hero h1 .w:nth-child(3){animation-delay:.24s}
+.hero h1 em{font-style:normal;color:var(--hl)}
+.hero h1 .squig{position:relative;white-space:nowrap}
+.hero h1 .squig svg{position:absolute;left:0;bottom:-.12em;width:100%;height:.3em;overflow:visible}
+.hero h1 .squig path{stroke:var(--crema);stroke-width:7;fill:none;stroke-linecap:round;stroke-dasharray:400;stroke-dashoffset:0;animation:draw 1.4s .6s ease both}
+@keyframes draw{from{stroke-dashoffset:400}}
+@keyframes pop{from{transform:translateY(30px) scale(.9)}}
+.hero .lede{font-size:1.2rem;color:var(--mute);margin-top:22px;max-width:34ch}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.chip{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;background:var(--milk);border:1px solid var(--line)}
+.ghostword{position:absolute;inset:auto 0 -2vw 0;font-family:var(--f-display);font-weight:900;font-size:22vw;line-height:.8;color:transparent;-webkit-text-stroke:2px var(--line);white-space:nowrap;text-align:center;z-index:0;pointer-events:none;user-select:none}
+.scene{position:relative;max-width:440px;width:100%;margin:0 auto}
+.scene svg{width:100%;height:auto;display:block;overflow:visible}
+
+/* floating bits */
+.floaters{position:absolute;inset:0;z-index:1;pointer-events:none}
+.fl{position:absolute;animation:bob 6s ease-in-out infinite}
+.fl svg{display:block}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-22px) rotate(calc(var(--r,0deg) + 14deg))}}
+
+/* snap pack visual: .auto loops on a 7s timeline, .manual is driven by a click */
+.snapviz{--l1:#2B160B;--l2:#7A4A28;--l3:#C79A72;--base:#F7F4EF}
+.snapviz svg{width:100%;height:auto;display:block;overflow:visible}
+.snapviz .half{transform-box:view-box;transform-origin:200px 156px}
+.snapviz .shade{opacity:0}
+.snapviz .lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:1.5px;fill:var(--ink)}
+.snapviz .stream{stroke:var(--l1);stroke-width:9;stroke-linecap:round;fill:none;stroke-dasharray:14 10}
+.snapviz .coffee{transform-box:fill-box;transform-origin:50% 100%}
+.snapviz .ice{transform-box:fill-box;transform-origin:center;animation:icebob 3.5s ease-in-out infinite}
+.snapviz .ice.b{animation-delay:-1.2s}.snapviz .ice.c{animation-delay:-2.1s}
+@keyframes icebob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(6deg)}}
+.snapviz .snapword{font-family:var(--f-display);font-weight:900;fill:var(--crema);transform-box:fill-box;transform-origin:center;opacity:0}
+@keyframes flow{to{stroke-dashoffset:-24}}
+.auto .half.l{animation:foldL 7s cubic-bezier(.4,0,.2,1) infinite}
+.auto .half.r{animation:foldR 7s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes foldL{0%,14%{transform:skewY(0deg) scaleX(1)}20%,62%{transform:skewY(24deg) scaleX(.72)}72%,100%{transform:skewY(0deg) scaleX(1)}}
+@keyframes foldR{0%,14%{transform:skewY(0deg) scaleX(1)}20%,62%{transform:skewY(-24deg) scaleX(.72)}72%,100%{transform:skewY(0deg) scaleX(1)}}
+.auto .shade{animation:shade 7s linear infinite}
+@keyframes shade{0%,14%{opacity:0}20%,62%{opacity:.22}72%,100%{opacity:0}}
+.auto .foldlbl{animation:foldlbl 7s linear infinite}
+@keyframes foldlbl{0%,12%{opacity:1}16%,76%{opacity:0}84%,100%{opacity:1}}
+.auto .stream{animation:flow .35s linear infinite, streamvis 7s linear infinite}
+.auto .pourlbl{animation:streamvis 7s linear infinite}
+@keyframes streamvis{0%,21%{opacity:0}24%,60%{opacity:1}64%,100%{opacity:0}}
+.auto .coffee{animation:fill 7s ease-in-out infinite}
+@keyframes fill{0%,23%{transform:scaleY(0)}60%,88%{transform:scaleY(1)}96%,100%{transform:scaleY(0)}}
+.auto .drop{animation:drop 7s linear infinite;opacity:0}
+.auto .drop.d2{animation-delay:.25s}.auto .drop.d3{animation-delay:.5s}
+@keyframes drop{0%,22%{transform:translateY(0);opacity:0}23%{opacity:1}31%{transform:translateY(100px);opacity:0}32%,100%{opacity:0}}
+.auto .snapword{animation:snapword 7s ease-in-out infinite}
+@keyframes snapword{0%,14%{opacity:0;transform:scale(.4) rotate(-10deg)}18%{opacity:1;transform:scale(1.15) rotate(-8deg)}27%{opacity:1;transform:scale(1) rotate(-8deg)}33%,100%{opacity:0;transform:scale(1) rotate(-8deg)}}
+.manual .half{transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
+.manual.snapped .half.l{transform:skewY(24deg) scaleX(.72)}
+.manual.snapped .half.r{transform:skewY(-24deg) scaleX(.72)}
+.manual .shade{transition:opacity .3s}.manual.snapped .shade{opacity:.22}
+.manual .coffee{transform:scaleY(0);transition:transform .5s}
+.manual.snapped .coffee{transform:scaleY(1);transition:transform 2.4s ease .35s}
+.manual .foldlbl{transition:opacity .2s}.manual.snapped .foldlbl{opacity:0}
+.manual .stream{animation:flow .35s linear infinite}
+.manual .stream,.manual .pourlbl{opacity:0;transition:opacity .2s}
+.manual.pouring .stream,.manual.pouring .pourlbl{opacity:1;transition-delay:.3s}
+.manual .drop{display:none}
+.manual.snapped .snapword{animation:snapOnce 1s ease both}
+@keyframes snapOnce{0%{opacity:0;transform:scale(.4) rotate(-10deg)}30%{opacity:1;transform:scale(1.15) rotate(-8deg)}70%{opacity:1;transform:scale(1) rotate(-8deg)}100%{opacity:0;transform:scale(1) rotate(-8deg)}}
+.demo-steps{list-style:none;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0;margin:16px 0 0}
+.demo-steps li{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;border:1.5px solid var(--ink);background:var(--milk);color:var(--ink)}
+.demo-steps li:nth-child(1){animation:hl1 7s linear infinite}
+.demo-steps li:nth-child(2){animation:hl2 7s linear infinite}
+.demo-steps li:nth-child(3){animation:hl3 7s linear infinite}
+@keyframes hl1{0%,13%{background:var(--cobalt);color:var(--onp)}15%,73%{background:var(--milk);color:var(--ink)}75%,100%{background:var(--cobalt);color:var(--onp)}}
+@keyframes hl2{0%,13%{background:var(--milk);color:var(--ink)}15%,22%{background:var(--cobalt);color:var(--onp)}24%,100%{background:var(--milk);color:var(--ink)}}
+@keyframes hl3{0%,22%{background:var(--milk);color:var(--ink)}24%,62%{background:var(--cobalt);color:var(--onp)}64%,100%{background:var(--milk);color:var(--ink)}}
+
+/* marquee */
+.marquee{background:var(--cobalt);color:var(--onp);overflow:hidden;border-block:3px solid var(--ink);transform:rotate(-1.4deg);margin-block:-10px;position:relative;z-index:3}
+.marquee .track{display:flex;width:max-content;animation:mq 26s linear infinite}
+.marquee span{font-family:var(--f-display);font-weight:800;font-size:clamp(1.1rem,2.4vw,1.7rem);padding:16px 26px;white-space:nowrap;display:flex;align-items:center;gap:26px}
+.marquee span i{width:14px;height:18px;border-radius:4px;background:var(--crema);display:inline-block;transform:rotate(-10deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+section{position:relative}
+.band{padding-block:100px 90px}
+.head{display:grid;gap:14px;margin-bottom:46px;max-width:780px}
+.head h2{font-size:clamp(2rem,4.6vw,3.6rem);font-weight:800}
+.head p{font-size:1.12rem;color:var(--mute);max-width:56ch}
+.rise{transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.rise.pre{transform:translateY(36px)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.step{background:var(--milk);border:2px solid var(--ink);border-radius:26px;padding:26px;display:grid;gap:14px;box-shadow:6px 6px 0 var(--ink);transition:transform .25s, box-shadow .25s}
+.step:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink)}
+.step .art{height:150px;border-radius:18px;background:var(--ice);display:grid;place-items:center;overflow:hidden}
+.step .n{font-family:var(--f-mono);font-size:.8rem;color:var(--hl);letter-spacing:.14em}
+.step h3{font-size:1.8rem;font-weight:800}
+.step p{color:var(--mute)}
+.mini-pack{width:56px;height:80px;border-radius:12px;background:var(--cobalt);position:relative;animation:minisnap 2.4s ease-in-out infinite;transform-origin:50% 50%}
+.mini-pack::after{content:"";position:absolute;left:6px;right:6px;top:50%;border-top:3px dashed var(--milk)}
+@keyframes minisnap{0%,40%{transform:rotate(-8deg) scaleY(1)}55%,80%{transform:rotate(-8deg) scaleY(.5)}100%{transform:rotate(-8deg) scaleY(1)}}
+.pourart{position:relative;width:90px;height:120px}
+.pourart .s{position:absolute;left:43px;top:0;width:6px;height:70px;border-radius:6px;background:repeating-linear-gradient(var(--espresso) 0 10px, transparent 10px 16px);background-size:6px 16px;animation:pourmini .4s linear infinite}
+@keyframes pourmini{to{background-position:0 16px}}
+.pourart .g{position:absolute;bottom:0;left:15px;width:62px;height:62px;border:3px solid var(--ink);border-top:none;border-radius:0 0 12px 12px;overflow:hidden}
+.pourart .g::after{content:"";position:absolute;inset:auto 0 0 0;height:60%;background:linear-gradient(var(--espresso),#8C5A35 60%,#E9D6C2);animation:rise 2.4s ease-in-out infinite}
+@keyframes rise{0%{height:15%}70%,100%{height:85%}}
+.sipart{font-size:0;position:relative;width:90px;height:120px}
+.sipart .g{position:absolute;bottom:0;left:20px;width:56px;height:76px;border:3px solid var(--ink);border-top:none;border-radius:0 0 12px 12px;background:linear-gradient(#8C5A35,#D9B996);overflow:hidden}
+.sipart .straw{position:absolute;left:52px;bottom:40px;width:7px;height:76px;background:var(--cobalt);border-radius:4px;transform:rotate(14deg);transform-origin:bottom}
+.sipart .bub{position:absolute;width:8px;height:8px;border-radius:50%;border:2px solid var(--milk);left:30px;bottom:6px;animation:bub 2s ease-in infinite}
+.sipart .bub:nth-child(4){left:46px;animation-delay:.7s}.sipart .bub:nth-child(5){left:38px;animation-delay:1.3s}
+@keyframes bub{from{transform:translateY(0);opacity:1}to{transform:translateY(-60px);opacity:0}}
+
+/* flavours */
+.flav{background:var(--espresso);color:var(--milk);overflow:hidden}
+.flav .head p{color:rgba(255,255,255,.75)}
+.bigslide{font-family:var(--f-display);font-weight:900;font-size:clamp(5rem,15vw,13rem);line-height:.9;white-space:nowrap;color:transparent;-webkit-text-stroke:2px color-mix(in srgb,var(--crema) 38%,transparent);will-change:transform;user-select:none;pointer-events:none}
+.packs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:-4.5rem;position:relative}
+.card{background:color-mix(in srgb,var(--espresso) 86%,#fff);border-radius:30px;padding:28px;display:grid;grid-template-columns:1fr;gap:22px;align-content:start;justify-items:start;border:1px solid rgba(255,255,255,.08);transform-style:preserve-3d;transition:transform .2s ease}
+.pack.chai{background:linear-gradient(160deg,#E07A2E,#A34A12)}
+.pack.tea{background:linear-gradient(160deg,#1FA38C,#0E6B5B)}
+.best{margin-top:14px;font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.best b{color:var(--crema);font-weight:500}
+.pack{width:130px;height:190px;border-radius:20px;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:14px;color:var(--milk);box-shadow:0 26px 40px -18px rgba(0,0,0,.6);animation:floaty 5s ease-in-out infinite}
+.pack.classic{background:linear-gradient(160deg,var(--cobalt),var(--cobalt-deep))}
+.pack.hazel{background:linear-gradient(160deg,#C9853D,#8E5420)}
+.pack::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed rgba(255,255,255,.7)}
+.pack::after{content:"";position:absolute;left:-6px;right:-6px;top:calc(50% - 6px);height:12px;background:radial-gradient(circle at 0 50%, #3A2114 6px, transparent 7px), radial-gradient(circle at 100% 50%, #3A2114 6px, transparent 7px)}
+.pack .lg{font-family:var(--f-display);font-weight:800;font-size:.95rem;letter-spacing:-.02em}
+.pack .sm{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.pack .nm{font-family:var(--f-display);font-weight:800;font-size:1.05rem;line-height:1.05}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(-1deg)}}
+.card h3{font-size:1.7rem;font-weight:800}
+.card .notes{display:flex;flex-wrap:wrap;gap:6px;margin-block:12px}
+.card .notes span{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}
+.card p{color:rgba(255,255,255,.8)}
+.meter{display:flex;gap:4px;margin-top:12px;align-items:center}
+.meter i{width:18px;height:8px;border-radius:4px;background:rgba(255,255,255,.18)}
+.meter i.on{background:var(--crema)}
+.meter small{font-family:var(--f-mono);font-size:.7rem;margin-left:8px;letter-spacing:.08em;text-transform:uppercase;color:#D8C3B2}
+
+/* origin */
+.origin .in{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.hills{border-radius:30px;overflow:hidden;background:var(--espresso);aspect-ratio:1/1;max-width:100%;position:relative;border:2px solid var(--ink)}
+.hills canvas{width:100%;height:100%;display:block}
+.hills .tag{position:absolute;left:18px;bottom:18px;background:var(--milk);border:2px solid var(--ink);border-radius:999px;padding:8px 14px;font-family:var(--f-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
+.hills .tag2{left:auto;right:18px;top:18px;bottom:auto;background:var(--crema)}
+.facts{display:grid;gap:14px;margin-top:26px}
+.fact{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline;border-top:2px solid var(--ink);padding-top:14px}
+.fact b{font-family:var(--f-display);font-weight:800;font-size:1.05rem}
+.fact span{color:var(--mute)}
+
+/* numbers */
+.nums{background:var(--cobalt);color:var(--onp)}
+.nums .in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;padding-block:70px}
+.num b{display:block;font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,6vw,4.6rem);line-height:1;font-variant-numeric:tabular-nums}
+.num span{display:block;margin-top:10px;font-size:1rem;color:color-mix(in srgb,var(--onp) 72%,transparent);max-width:22ch}
+
+/* business */
+.biz .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.use{background:var(--milk);border-radius:22px;padding:22px;border:2px solid var(--ink);display:grid;gap:10px;align-content:start;transition:transform .25s,background .25s}
+.use:hover{transform:rotate(-1.5deg);background:color-mix(in srgb,var(--crema) 14%,var(--milk))}
+.use .ic{width:48px;height:48px;border-radius:14px;background:var(--ice);display:grid;place-items:center}
+.use h3{font-size:1.15rem;font-weight:800;letter-spacing:-.01em}
+.use p{color:var(--mute);font-size:.97rem}
+.pilot{margin-top:26px;background:var(--crema);border:2px solid var(--ink);border-radius:30px;padding:34px;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;align-items:center;box-shadow:8px 8px 0 var(--ink)}
+.pilot h3{font-size:clamp(1.5rem,3vw,2.3rem);font-weight:800;color:var(--espresso)}
+.pilot p{color:var(--espresso);margin-top:10px}
+.pilot ol{margin:0;padding-left:20px;display:grid;gap:10px;color:var(--espresso);font-weight:500}
+.pilot ol li::marker{font-family:var(--f-display);font-weight:800}
+
+/* faq */
+.faq{display:grid;gap:12px;max-width:860px}
+.faq details{background:var(--milk);border:2px solid var(--ink);border-radius:18px;padding:0 22px}
+.faq summary{list-style:none;cursor:pointer;font-family:var(--f-display);font-weight:700;font-size:1.05rem;padding:20px 0;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:1.6rem;line-height:1;transition:transform .25s;color:var(--hl)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding-bottom:20px;color:var(--mute);max-width:64ch}
+
+/* contact */
+.contact{background:var(--ink);color:var(--milk);overflow:hidden}
+.contact .in{padding-block:100px;display:grid;gap:26px;justify-items:start;position:relative;z-index:1}
+.contact h2{font-size:clamp(2.4rem,6vw,5rem);font-weight:900;max-width:14ch}
+.contact h2 em{font-style:normal;color:var(--crema)}
+.contact p{color:rgba(255,255,255,.72);max-width:52ch;font-size:1.1rem}
+.mailrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.mailbox{font-family:var(--f-mono);font-size:1.05rem;padding:14px 18px;border-radius:999px;border:2px solid rgba(255,255,255,.25);user-select:all;background:rgba(255,255,255,.06)}
+.copied{font-family:var(--f-mono);font-size:.8rem;color:var(--crema)}
+.contact .ghostword{-webkit-text-stroke:2px rgba(255,255,255,.1);bottom:-1vw;font-size:clamp(3rem,13vw,11rem)}
+footer{background:var(--ink);color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.12)}
+footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding-block:26px;font-size:.9rem}
+
+/* realistic sachet: glossy film, crimped end seals, folds in real 3D */
+.snapviz{container-type:inline-size;--pk:#1C1512;--acc:#D99A5B}
+.sv{position:relative;display:block}
+.stage{position:absolute;display:block;left:21cqw;top:24.5cqw;width:58cqw;height:29cqw;perspective:240cqw;pointer-events:none}
+.rig{position:absolute;inset:0;display:block;transform-style:preserve-3d;transform:rotateX(16deg) rotateZ(-5deg)}
+.hf{position:absolute;top:0;width:50%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.3cqw;color:#F7F1E8;overflow:hidden;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 32%,rgba(255,255,255,.3) 46%,rgba(255,255,255,0) 60%) 120% 0/250% 100% no-repeat,radial-gradient(130% 100% at 50% 30%,rgba(255,255,255,.14),rgba(0,0,0,.24)),var(--pk);
+  box-shadow:0 1.6cqw 3.4cqw rgba(0,0,0,.3),inset 0 .3cqw 0 rgba(255,255,255,.28),inset 0 -.3cqw 0 rgba(0,0,0,.3);
+  animation:sheen 5s ease-in-out infinite}
+@keyframes sheen{0%,100%{background-position:120% 0,0 0,0 0}50%{background-position:-20% 0,0 0,0 0}}
+.hf.l{left:0;transform-origin:100% 50%;border-radius:2.2cqw 0 0 2.2cqw}
+.hf.r{left:50%;transform-origin:0 50%;border-radius:0 2.2cqw 2.2cqw 0}
+.hf::before{content:"";position:absolute;top:0;bottom:0;width:2.6cqw;background:repeating-linear-gradient(0deg,rgba(255,255,255,.22) 0 .35cqw,rgba(0,0,0,.16) .35cqw .7cqw)}
+.hf.l::before{left:0}.hf.r::before{right:0}
+.hf::after{content:"";position:absolute;inset:0;background:#000;opacity:0}
+.hf .lg{font-family:var(--f-display);font-weight:800;font-size:3.6cqw;letter-spacing:-.03em;line-height:1}
+.hf .sm{display:block;font-family:var(--f-mono);font-size:1.9cqw;letter-spacing:.2em;opacity:.8;line-height:1}
+.hf .pname{display:block;background:var(--acc);color:#1C1512;font-family:var(--f-display);font-weight:700;font-size:2.1cqw;padding:1cqw 2cqw;border-radius:99px;white-space:nowrap;line-height:1}
+.crease{position:absolute;display:block;left:50%;top:6%;bottom:6%;width:0;border-left:.4cqw dashed rgba(255,255,255,.7);transform:translateX(-50%) translateZ(.2cqw)}
+.auto .rig{animation:rigA 7s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes rigA{0%,9%{transform:rotateX(16deg) rotateZ(-5deg)}17%,64%{transform:rotateX(54deg) rotateZ(-9deg)}74%,100%{transform:rotateX(16deg) rotateZ(-5deg)}}
+.auto .hf.l{animation:hfL 7s cubic-bezier(.4,0,.2,1) infinite, sheen 5s ease-in-out infinite}
+.auto .hf.r{animation:hfR 7s cubic-bezier(.4,0,.2,1) infinite, sheen 5s ease-in-out infinite}
+@keyframes hfL{0%,16%{transform:rotateY(0deg)}22%,62%{transform:rotateY(40deg)}70%,100%{transform:rotateY(0deg)}}
+@keyframes hfR{0%,16%{transform:rotateY(0deg)}22%,62%{transform:rotateY(-40deg)}70%,100%{transform:rotateY(0deg)}}
+.auto .hf.r::after{animation:shade 7s linear infinite}
+.manual .rig{transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.manual.snapped .rig{transform:rotateX(54deg) rotateZ(-9deg)}
+.manual .hf{transition:transform .4s cubic-bezier(.3,1.5,.5,1) .2s}
+.manual.snapped .hf.l{transform:rotateY(40deg)}
+.manual.snapped .hf.r{transform:rotateY(-40deg)}
+.manual .hf.r::after{transition:opacity .3s}.manual.snapped .hf.r::after{opacity:.22}
+/* flavour cards and step art use the same film look */
+.pack.classic,.pack.chai,.pack.tea{overflow:hidden;background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.28) 45%,rgba(255,255,255,0) 60%),radial-gradient(130% 100% at 50% 30%,rgba(255,255,255,.14),rgba(0,0,0,.24)),var(--pkc);box-shadow:0 26px 40px -18px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.3)}
+.pack.classic{--pkc:#1C1512}.pack.chai{--pkc:#C85A17}.pack.tea{--pkc:#1E6A55}
+.pack::after{display:block;content:"";position:absolute;inset:0;left:0;right:0;top:0;height:auto;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.22) 0 2px,rgba(0,0,0,.16) 2px 4px) left/10px 100% no-repeat,repeating-linear-gradient(0deg,rgba(255,255,255,.22) 0 2px,rgba(0,0,0,.16) 2px 4px) right/10px 100% no-repeat}
+.mini-pack i{background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.3) 48%,rgba(255,255,255,0) 64%),#1C1512}
+.use .ic svg *{stroke:var(--hl)}.use .ic svg circle{fill:var(--hl)}
+/* colour preview picker */
+.palpick{position:fixed;z-index:40;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:var(--milk);border:1.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.palpick button{font:inherit;letter-spacing:inherit;text-transform:inherit;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1.5px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.palpick button[aria-pressed="true"]{border-color:var(--ink);background:var(--ice)}
+.palpick i{width:12px;height:12px;border-radius:50%;display:block}
+@media (max-width:520px){.palpick > span{display:none}}
+
+/* landscape pack look, shared by logo, step art and flavour cards */
+.logo .mark{width:34px;height:24px}
+.logo .mark::after{left:50%;right:auto;top:3px;bottom:3px;border-top:none;border-left:2px dashed var(--onp)}
+.mini-pack{display:flex;width:auto;height:auto;background:none;animation:none;border-radius:0}
+.mini-pack::after{display:none}
+.mini-pack i{display:block;width:46px;height:58px;background:var(--cobalt)}
+.mini-pack i:first-child{border-radius:12px 0 0 12px;transform-origin:100% 50%;animation:miniL 2.6s ease-in-out infinite}
+.mini-pack i:last-child{border-radius:0 12px 12px 0;transform-origin:0 50%;border-left:3px dashed var(--milk);animation:miniR 2.6s ease-in-out infinite}
+@keyframes miniL{0%,35%{transform:skewY(0deg) scaleX(1)}55%,85%{transform:skewY(22deg) scaleX(.75)}100%{transform:skewY(0deg) scaleX(1)}}
+@keyframes miniR{0%,35%{transform:skewY(0deg) scaleX(1)}55%,85%{transform:skewY(-22deg) scaleX(.75)}100%{transform:skewY(0deg) scaleX(1)}}
+.pack{width:214px;max-width:100%;height:128px;border-radius:18px;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0;flex-direction:row}
+.pack > *{padding:12px;min-width:0}
+.pack::before{left:50%;right:auto;top:8px;bottom:8px;border-top:none;border-left:2px dashed rgba(255,255,255,.75)}
+.pack .lg{font-size:.68rem;text-align:center}
+.pack .nm{font-size:.95rem}
+/* pack section */
+.packsec .grid2{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center}
+.packsec .grid2 > *{min-width:0}
+.demo{background:var(--milk);border:2px solid var(--ink);border-radius:30px;padding:24px;box-shadow:8px 8px 0 var(--ink);display:grid;gap:14px;justify-items:center}
+.demo .viz{--notch:var(--milk);width:100%;max-width:300px;background:none;border:0;padding:0;cursor:pointer;border-radius:16px}
+.flchips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.flchips button{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:1.5px solid var(--ink);background:var(--milk);color:var(--ink);cursor:pointer}
+.flchips button[aria-pressed="true"]{background:var(--ink);color:var(--milk)}
+.feats{display:grid;gap:18px}
+.feat{border-top:2px solid var(--ink);padding-top:14px}
+.feat h3{font-size:1.25rem;font-weight:800;letter-spacing:-.01em}
+.feat p{color:var(--mute);margin-top:6px;max-width:52ch}
+.cmp{margin-top:46px;background:var(--milk);border:2px solid var(--ink);border-radius:24px;overflow:hidden}
+.cmp .tscroll{overflow-x:auto}
+.cmp table{width:100%;min-width:560px;border-collapse:collapse}
+.cmp th,.cmp td{text-align:left;padding:15px 18px;border-bottom:1px solid var(--line);vertical-align:top}
+.cmp tr:last-child td{border-bottom:none}
+.cmp th{font-family:var(--f-display);font-weight:700;font-size:.95rem}
+.cmp td.k{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.cmp td{color:var(--mute)}
+.cmp .us{background:var(--cobalt);color:var(--onp);font-weight:600}
+.cmp th.us{border-bottom-color:var(--cobalt-deep)}.cmp td.us{border-bottom-color:var(--cobalt-deep)}
+
+/* silver foil sachet with a colour label, glass that starts full and changes colour, India map */
+.snapviz{--acc:#B9A2FF;--l1:#2E1A0F;--m1:#7A4E30;--m2:#3E2415;--base:#D9E9F1}
+.hf{color:#0E0E10;gap:1.1cqw;background:linear-gradient(100deg,rgba(255,255,255,0) 34%,rgba(255,255,255,.75) 47%,rgba(255,255,255,0) 60%) 120% 0/250% 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(180deg,rgba(255,255,255,.55) 0,rgba(255,255,255,0) 14%,rgba(0,0,0,0) 78%,rgba(0,0,0,.28) 100%),linear-gradient(98deg,#8E9197 0%,#DCDDE0 16%,#A9ACB2 33%,#F1F1F3 50%,#A2A5AB 68%,#D5D6DA 84%,#85888E 100%);
+  box-shadow:0 2.6cqw 4.4cqw -1.2cqw rgba(0,0,0,.42),inset 0 .25cqw 0 rgba(255,255,255,.7),inset 0 -.25cqw 0 rgba(0,0,0,.28)}
+@keyframes sheen{0%,100%{background-position:120% 0,0 0,0 0,0 0}50%{background-position:-20% 0,0 0,0 0,0 0}}
+.hf::before{background:repeating-linear-gradient(0deg,rgba(255,255,255,.65) 0 .32cqw,rgba(0,0,0,.2) .32cqw .64cqw)}
+.hf .lg{font-weight:900;font-size:4.5cqw;letter-spacing:-.04em}
+.hf .sm{opacity:.72;font-size:1.8cqw}
+.hf .pname{border-radius:.5cqw;font-weight:800;font-size:2.5cqw;padding:1.2cqw 1.8cqw;color:#0E0E10;box-shadow:0 .2cqw .5cqw rgba(0,0,0,.2)}
+.crease{border-left:.35cqw dashed rgba(0,0,0,.5)}
+.manual .hf{transition:transform .5s cubic-bezier(.4,0,.2,1) .2s}
+.snapviz .stream{stroke:var(--l1);stroke-width:6;stroke-linecap:round;fill:none;stroke-dasharray:190;stroke-dashoffset:190}
+.auto .stream{animation:pour 7s linear infinite}
+@keyframes pour{0%,21%{stroke-dashoffset:190}25%,57%{stroke-dashoffset:0}61%,100%{stroke-dashoffset:-190}}
+.manual .stream{animation:none;opacity:1}
+.manual.pouring .stream{animation:pourOnce 2.4s linear .45s both}
+@keyframes pourOnce{0%{stroke-dashoffset:190}12%,82%{stroke-dashoffset:0}100%{stroke-dashoffset:-190}}
+.snapviz .mixed{opacity:0}
+.auto .mixed{animation:mix 7s ease-in-out infinite}
+@keyframes mix{0%,25%{opacity:0}56%,88%{opacity:1}96%,100%{opacity:0}}
+.manual .mixed{transition:opacity .4s}
+.manual.snapped .mixed{opacity:1;transition:opacity 2.2s ease .8s}
+.snapviz .plume{opacity:0;transform-box:fill-box;transform-origin:50% 0}
+.auto .plume{animation:plume 7s ease-out infinite}
+@keyframes plume{0%,24%{opacity:0;transform:scale(.3)}30%{opacity:.75;transform:scale(1)}52%{opacity:0;transform:scale(3.4,6)}100%{opacity:0;transform:scale(3.4,6)}}
+.manual.pouring .plume{animation:plumeOnce 2.2s ease-out .7s both}
+@keyframes plumeOnce{0%{opacity:0;transform:scale(.3)}20%{opacity:.75;transform:scale(1)}100%{opacity:0;transform:scale(3.4,6)}}
+.snapviz .st{font-size:11px;letter-spacing:2px;transition:opacity .3s}
+.snapviz .st.after{opacity:0}
+.auto .st.before{animation:stB 7s linear infinite}
+.auto .st.after{animation:stA 7s linear infinite}
+@keyframes stB{0%,40%{opacity:1}46%,92%{opacity:0}98%,100%{opacity:1}}
+@keyframes stA{0%,46%{opacity:0}54%,88%{opacity:1}94%,100%{opacity:0}}
+.manual.snapped .st.before{opacity:0;transition:opacity .3s 1.6s}
+.manual.snapped .st.after{opacity:1;transition:opacity .4s 2.1s}
+.snapviz .steam{display:none}
+.snapviz.hot .steam{display:block}
+.snapviz.hot .ice{display:none}
+.snapviz .steam path{animation:steam 3s ease-in-out infinite}
+.snapviz .steam path:nth-child(2){animation-delay:-1s}.snapviz .steam path:nth-child(3){animation-delay:-2s}
+@keyframes steam{0%{transform:translateY(10px);opacity:0}40%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
+.pack.classic,.pack.chai,.pack.tea{color:#0E0E10;background:linear-gradient(100deg,rgba(255,255,255,0) 34%,rgba(255,255,255,.75) 47%,rgba(255,255,255,0) 60%) ,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(180deg,rgba(255,255,255,.55) 0,rgba(255,255,255,0) 14%,rgba(0,0,0,0) 78%,rgba(0,0,0,.28) 100%),linear-gradient(98deg,#8E9197 0%,#DCDDE0 16%,#A9ACB2 33%,#F1F1F3 50%,#A2A5AB 68%,#D5D6DA 84%,#85888E 100%)}
+.pack.classic{--pkc:#B9A2FF}.pack.chai{--pkc:#9BEA5C}.pack.tea{--pkc:#58BDF5}
+.pack > span:last-child{background:var(--pkc);margin:12px 16px 12px 10px;padding:8px 10px;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.pack::before{border-left-color:rgba(0,0,0,.5)}
+.pack .lg{font-weight:900;font-size:.95rem;letter-spacing:-.04em}
+.pack .sm{opacity:.75}
+.mini-pack i{background:linear-gradient(98deg,#8E9197 0%,#DCDDE0 20%,#A9ACB2 45%,#F1F1F3 65%,#A2A5AB 100%)}
+.mini-pack i:last-child{border-left-color:rgba(0,0,0,.5)}
+.hills svg{width:100%;height:100%;display:block}
+.hills .st8{fill:#2B2C31;stroke:#0E0E10;stroke-width:.8;transition:fill .2s}
+.hills .st8.ka{fill:var(--cobalt)}
+.hills .maplbl{font-family:var(--f-mono);font-size:15px;letter-spacing:1.5px;fill:#FFFFFF}
+.hills .lead{stroke:rgba(255,255,255,.55);stroke-width:1.2;fill:none}
+.hills .route{stroke:var(--crema);stroke-width:2;fill:none;stroke-dasharray:5 6;animation:route 1.2s linear infinite}
+@keyframes route{to{stroke-dashoffset:-22}}
+.hills .pin{fill:var(--crema);stroke:#0E0E10;stroke-width:1.5}
+.hills .ring{fill:none;stroke:var(--crema);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(4);opacity:0}}
+
+/* one pack design everywhere: logo on the left, a big colour label on the right, and a soft filled-pouch bulge over both */
+.stage{top:21.5cqw;height:35cqw}
+.hf.l{border-radius:4.9cqw 0 0 4.9cqw}
+.hf.r{border-radius:0 4.9cqw 4.9cqw 0;align-items:stretch}
+.hf .lg{font-size:4.1cqw}
+.hf .stk{display:flex;flex-direction:column;justify-content:center;gap:1.2cqw;flex:1;margin:3.3cqw 4.6cqw 0 2.7cqw;padding:2.2cqw 2.7cqw 4.4cqw;border-radius:1.1cqw 1.1cqw 0 0;background:linear-gradient(180deg,rgba(255,255,255,0) 76%,rgba(255,255,255,.45) 84%,rgba(0,0,0,.1) 90%,rgba(0,0,0,.5) 100%),var(--acc);clip-path:polygon(0 0,100% 0,100% 86%,96.5% 100%,3.5% 100%,0 86%);box-shadow:0 .3cqw .8cqw rgba(0,0,0,.25);position:relative;z-index:1}
+.hf .stk .pname{display:block;background:none;padding:0;border-radius:0;box-shadow:none;font-family:var(--f-display);font-weight:800;font-size:4.1cqw;line-height:1.25;letter-spacing:-.01em;white-space:normal}
+.hf .stk .sm{font-size:2.3cqw;letter-spacing:.14em;opacity:.8}
+.hf::after{z-index:4}
+.fx{position:absolute;inset:0;display:block;pointer-events:none;z-index:3;border-radius:inherit}
+.hf .fx{background:
+  linear-gradient(100deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.3) 49%,rgba(255,255,255,0) 60%) 120% 0/250% 100% no-repeat,
+  linear-gradient(118deg,rgba(255,255,255,0) 14%,rgba(255,255,255,.2) 15.5%,rgba(255,255,255,0) 18%),
+  linear-gradient(64deg,rgba(0,0,0,0) 78%,rgba(0,0,0,.1) 80%,rgba(0,0,0,0) 83%),
+  radial-gradient(60% 58% at 42% 36%,rgba(255,255,255,.3),rgba(255,255,255,0) 70%) no-repeat,
+  linear-gradient(90deg,rgba(0,0,0,.2) 0,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 76%,rgba(0,0,0,.2) 100%),
+  linear-gradient(180deg,rgba(0,0,0,.1) 0,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 72%,rgba(0,0,0,.24) 100%);
+  animation:fxa 5s ease-in-out infinite}
+@keyframes fxa{0%,100%{background-position:120% 0,0 0,0 0,0 0,0 0,0 0}50%{background-position:-20% 0,0 0,0 0,3cqw 2cqw,0 0,0 0}}
+.pack > span{position:relative;z-index:1}
+.pack::before{z-index:1}.pack::after{z-index:2}
+.pack > span:nth-child(2){background:linear-gradient(180deg,rgba(255,255,255,0) 76%,rgba(255,255,255,.45) 84%,rgba(0,0,0,.1) 90%,rgba(0,0,0,.5) 100%),var(--pkc);clip-path:polygon(0 0,100% 0,100% 86%,96.5% 100%,3.5% 100%,0 86%);margin:12px 16px 0 10px;padding:8px 10px 16px;border-radius:4px 4px 0 0;box-shadow:0 1px 3px rgba(0,0,0,.25);display:flex;flex-direction:column;justify-content:center;gap:5px;align-self:stretch}
+.pack > span:nth-child(2) > br{display:none}
+.pack .nm{line-height:1.25}
+.pack .fx{z-index:2;background:
+  linear-gradient(100deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.3) 49%,rgba(255,255,255,0) 60%) 120% 0/250% 100% no-repeat,
+  linear-gradient(118deg,rgba(255,255,255,0) 8%,rgba(255,255,255,.2) 9%,rgba(255,255,255,0) 10.5%),
+  linear-gradient(64deg,rgba(0,0,0,0) 88%,rgba(0,0,0,.1) 89.5%,rgba(0,0,0,0) 91.5%),
+  radial-gradient(30% 58% at 21% 36%,rgba(255,255,255,.3),rgba(255,255,255,0) 70%) no-repeat,
+  radial-gradient(30% 58% at 71% 36%,rgba(255,255,255,.3),rgba(255,255,255,0) 70%) no-repeat,
+  linear-gradient(90deg,rgba(0,0,0,.2) 0,rgba(0,0,0,0) 12%,rgba(0,0,0,0) 40%,rgba(0,0,0,.18) 50%,rgba(0,0,0,0) 60%,rgba(0,0,0,0) 88%,rgba(0,0,0,.2) 100%),
+  linear-gradient(180deg,rgba(0,0,0,.1) 0,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 72%,rgba(0,0,0,.24) 100%);
+  animation:fxb 5s ease-in-out infinite}
+@keyframes fxb{0%,100%{background-position:120% 0,0 0,0 0,0 0,0 0,0 0,0 0}50%{background-position:-20% 0,0 0,0 0,8px 5px,8px 5px,0 0,0 0}}
+.hills .st8.as{fill:#58BDF5}
+.hills .tag i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;border:1px solid #0E0E10;vertical-align:-1px}
+.hills .tag2{background:var(--milk)}
+.hills .tag3{left:auto;right:18px;top:58px;bottom:auto;background:var(--milk)}
+
+@media (max-width:900px){
+  .packsec .grid2{grid-template-columns:1fr}
+  nav.links{display:none}
+  .hero .in,.origin .in,.pilot{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .packs{grid-template-columns:1fr;margin-top:-2rem}
+  .card{grid-template-columns:auto 1fr;align-items:center}
+  .biz .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nums .in{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .scene{max-width:340px}
+  .fl{opacity:.45}
+  .fl:nth-child(1),.fl:nth-child(4){display:none}
+}
+@media (max-width:520px){
+  .card{grid-template-columns:1fr;justify-items:start}
+  .biz .grid{grid-template-columns:1fr}
+  .fact{grid-template-columns:1fr;gap:4px}
+  header .btn{display:none}
+  .band{padding-block:72px 64px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .auto .mixed{opacity:1} .auto .stream{stroke-dashoffset:0} .auto .rig{transform:rotateX(54deg) rotateZ(-9deg)} .auto .hf.l{transform:rotateY(40deg)} .auto .hf.r{transform:rotateY(-40deg)} .rise.pre{transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="in">
+  <a class="logo" href="#home" aria-label="onlysnaps home"><span class="mark" aria-hidden="true"></span><span>only<b>snaps</b></span></a>
+  <nav class="links" aria-label="Main">
+    <a href="#pack">The pack</a><a href="#how">How to use</a><a href="#flavours">Flavours</a><a href="#hotels">For hotels</a>
+  </nav>
+  <a class="btn" href="#contact">Start a pilot</a>
+</div></header>
+
+<section class="hero" id="home">
+  <div class="ghostword" aria-hidden="true">SNAP</div>
+  <div class="floaters" id="floaters" aria-hidden="true"></div>
+  <div class="in">
+    <div>
+      <div class="mono" style="color:var(--hl);margin-bottom:18px">The one-hand snap pack</div>
+      <h1><span class="w">Don't tear.</span> <span class="w"><em>Just <span class="squig">snap.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 Q 30 2 60 12 T 120 10 T 198 8"/></svg></span></em></span></h1>
+      <p class="lede">onlysnaps is a single-serve pack that opens with one hand. Fold it in half and it pours a clean shot of cold brew, masala chai or iced tea into your glass.</p>
+      <div class="ctas"><a class="btn" href="#pack">See how the pack works</a><a class="btn ghost" href="#hotels">For hotels &amp; stays</a></div>
+      <div class="chips"><span class="chip">One hand</span><span class="chip">No scissors</span><span class="chip">No sticky fingers</span></div>
+    </div>
+    <div><div class="scene snapviz auto" id="scene"></div><ol class="demo-steps" aria-label="How the pack opens"><li>Hold it flat</li><li>Fold in half</li><li>It pours</li></ol></div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+<section class="band packsec" id="pack"><div class="in">
+  <div class="head rise"><div class="mono" style="color:var(--hl)">The pack</div><h2>A sachet you fold, not tear.</h2>
+  <p>Ordinary sachets need two hands and usually spill. Ours is scored down the middle. Fold it in half and it snaps open, then pours from one small opening.</p></div>
+  <div class="grid2">
+    <div class="demo rise">
+      <div class="mono" style="color:var(--hl)">Try it: tap the pack</div>
+      <button class="viz snapviz manual" id="demoviz" type="button" aria-label="Snap the pack open"></button>
+      <div class="flchips" role="group" aria-label="Choose a drink">
+        <button type="button" data-f="cold" aria-pressed="true">Cold brew</button>
+        <button type="button" data-f="chai" aria-pressed="false">Masala chai</button>
+        <button type="button" data-f="tea" aria-pressed="false">Iced tea</button>
+      </div>
+      <button class="btn" id="snapbtn" type="button">Snap it</button>
+    </div>
+    <div class="feats">
+      <div class="feat rise"><h3>Flat as a card</h3><p>Each pack is a slim, card-sized sachet holding one drink. It slips into a pocket, a gym bag or a hotel tray.</p></div>
+      <div class="feat rise"><h3>Scored down the middle</h3><p>The dashed line is a snap line cut into the stiff side of the pack. It stays sealed until you fold it.</p></div>
+      <div class="feat rise"><h3>Opens with one hand</h3><p>Hold the pack between thumb and fingers and fold it in half. It snaps open at the centre. No tearing, teeth or scissors.</p></div>
+      <div class="feat rise"><h3>Pours where you aim</h3><p>The drink leaves through one small opening at the fold, in a steady stream, so nothing runs over your fingers.</p></div>
+    </div>
+  </div>
+  <div class="cmp rise"><div class="tscroll"><table>
+    <thead><tr><th></th><th>Tear-open sachet</th><th class="us">onlysnaps snap pack</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Opening</td><td>Two hands, and often teeth or scissors</td><td class="us">Fold in half with one hand</td></tr>
+      <tr><td class="k">Mess</td><td>Drips on fingers and the counter</td><td class="us">Pours from one small opening</td></tr>
+      <tr><td class="k">Control</td><td>Squirts unevenly when it tears</td><td class="us">A steady stream where you aim it</td></tr>
+      <tr><td class="k">Last drops</td><td>Liquid stays stuck in the corners</td><td class="us">The fold squeezes the pack as it opens</td></tr>
+      <tr><td class="k">Look</td><td>Like a ketchup sample</td><td class="us">Flat, glossy and card-sized</td></tr>
+    </tbody></table></div></div>
+</div></section>
+
+<section class="band" id="how" style="padding-top:0"><div class="in">
+  <div class="head rise"><div class="mono" style="color:var(--hl)">How to use it</div><h2>Three moves. Ten seconds. Done.</h2>
+  <p>Every pack holds one shot. There's nothing to measure, brew or wash.</p></div>
+  <div class="steps">
+    <div class="step rise"><div class="art"><div class="mini-pack"><i></i><i></i></div></div><div class="n">STEP 1</div><h3>Snap</h3><p>Hold the pack flat over your glass and fold it in half along the dashed line. It snaps open at the centre.</p></div>
+    <div class="step rise"><div class="art"><div class="pourart"><div class="s"></div><div class="g"></div></div></div><div class="n">STEP 2</div><h3>Pour</h3><p>Keep squeezing and the shot pours from the fold. Use milk, water or ice, hot or cold.</p></div>
+    <div class="step rise"><div class="art"><div class="sipart"><div class="g"></div><div class="straw"></div><div class="bub"></div><div class="bub"></div><div class="bub"></div></div></div><div class="n">STEP 3</div><h3>Sip</h3><p>Stir once. You have a café-style cold brew, masala chai or iced tea, with no queue.</p></div>
+  </div>
+</div></section>
+
+<section class="flav band" id="flavours">
+  <div class="in"><div class="head rise"><div class="mono" style="color:var(--crema)">The shots</div><h2>Three shots. One snap each.</h2>
+  <p>Coffee, chai and tea, each in its own single-serve pack. Pick one, snap it, pour it.</p></div></div>
+  <div class="bigslide" id="bigslide" aria-hidden="true">COLD BREW · MASALA CHAI · ICED TEA · COLD BREW · MASALA CHAI</div>
+  <div class="in"><div class="packs">
+    <div class="card tilt rise">
+      <div class="pack classic"><span class="lg">onlysnaps</span><span><span class="nm">Cold<br>Brew</span><br><span class="sm">Coffee shot</span></span></div>
+      <div><h3>Arabica Cold Brew</h3><div class="notes"><span>100% Arabica</span><span>Chikmagalur</span><span>Coorg</span></div>
+      <p>Smooth, strong coffee concentrate. Pour into cold water over ice for a classic cold brew. Add a splash of milk if you like.</p>
+      <div class="best">Best with: <b>cold water + ice</b></div></div>
+    </div>
+    <div class="card tilt rise">
+      <div class="pack chai"><span class="lg">onlysnaps</span><span><span class="nm">Masala<br>Chai</span><br><span class="sm">Chai shot</span></span></div>
+      <div><h3>Masala Chai</h3><div class="notes"><span>Black tea</span><span>Warm spices</span><span>Desi classic</span></div>
+      <p>A strong spiced chai concentrate. Stir into hot milk for cutting chai, or over cold milk and ice for iced chai.</p>
+      <div class="best">Best with: <b>hot milk</b></div></div>
+    </div>
+    <div class="card tilt rise">
+      <div class="pack tea"><span class="lg">onlysnaps</span><span><span class="nm">Iced<br>Tea</span><br><span class="sm">Tea shot</span></span></div>
+      <div><h3>Iced Tea</h3><div class="notes"><span>Black tea</span><span>Refreshing</span><span>Summer-ready</span></div>
+      <p>A bright tea concentrate. Pour into cold water with ice for a glass of iced tea in seconds.</p>
+      <div class="best">Best with: <b>cold water + ice</b></div></div>
+    </div>
+  </div></div>
+</section>
+
+<section class="band origin" id="origin"><div class="in">
+  <div class="hills"><canvas id="hills" aria-label="Animated contour lines of the Western Ghats hills"></canvas><span class="tag" id="hilltag">Chikmagalur · Coorg</span><span class="tag tag2"><i style="background:var(--cobalt)"></i>Coffee · Karnataka</span><span class="tag tag3"><i style="background:#58BDF5"></i>Tea · Assam</span></div>
+  <div class="rise">
+    <div class="mono" style="color:var(--hl)">Where it comes from</div>
+    <h2 style="font-size:clamp(2rem,4.4vw,3.4rem);font-weight:800;margin-top:12px">Grown in the hills that gave India its coffee.</h2>
+    <p style="color:var(--mute);font-size:1.12rem;margin-top:16px;max-width:52ch">Our coffee comes from shade-grown estates in the Western Ghats of Karnataka, and our tea comes from Assam. We cold brew the coffee slowly so the shot stays smooth and low in bitterness.</p>
+    <div class="facts">
+      <div class="fact"><b>Coffee</b><span>100% Arabica. No Robusta blended in.</span></div>
+      <div class="fact"><b>Coffee from</b><span>Chikmagalur and Coorg, Karnataka.</span></div>
+      <div class="fact"><b>Tea from</b><span>Assam, for the masala chai and iced tea shots.</span></div>
+      <div class="fact"><b>Method</b><span>Slow cold brew, then concentrated into a single shot.</span></div>
+      <div class="fact"><b>Made</b><span>In India, from Indian-grown coffee and tea.</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="nums"><div class="in">
+  <div class="num rise"><b data-to="10">10</b><span>seconds from pack to glass</span></div>
+  <div class="num rise"><b data-to="1">1</b><span>snap to open, no scissors</span></div>
+  <div class="num rise"><b data-to="0">0</b><span>machines, baristas or cleanup</span></div>
+  <div class="num rise"><b data-to="100" data-suf="%">100%</b><span>Arabica, from Karnataka</span></div>
+</div></section>
+
+<section class="band biz" id="hotels"><div class="in">
+  <div class="head rise"><div class="mono" style="color:var(--hl)">For hotels, villas &amp; offices</div><h2>A better coffee in every room, with no machine to install.</h2>
+  <p>Guests want café drinks in their room. onlysnaps gives them a cold brew, a masala chai or an iced tea in 10 seconds, and gives you a premium item for the minibar.</p></div>
+  <div class="grid">
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="3" fill="none" stroke="#2236F2" stroke-width="2.4"/><line x1="4" y1="10" x2="22" y2="10" stroke="#2236F2" stroke-width="2.4"/><line x1="8" y1="5" x2="8" y2="7" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Minibar</h3><p>Premium coffee, chai and tea shots next to the snacks. Easy to stock and easy to count.</p></div>
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M4 9h14v7a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6z" fill="none" stroke="#2236F2" stroke-width="2.4"/><path d="M18 11h2a3 3 0 0 1 0 6h-2" fill="none" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Coffee &amp; tea tray</h3><p>Upgrade the in-room tray from instant sachets to Arabica cold brew, masala chai and iced tea.</p></div>
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="10" width="20" height="13" rx="2" fill="none" stroke="#2236F2" stroke-width="2.4"/><path d="M13 10v13M3 15h20M13 10c-2-6-8-6-7-2 1 2 7 2 7 2s6 0 7-2c1-4-5-4-7 2" fill="none" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Welcome amenity</h3><p>Two shots waiting in the room on arrival. A small touch guests post about.</p></div>
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M3 13l10-10h8v8L11 21z" fill="none" stroke="#2236F2" stroke-width="2.4" stroke-linejoin="round"/><circle cx="17" cy="9" r="2" fill="#2236F2"/></svg></div><h3>Your own label</h3><p>Your hotel's name on the pack, with our coffee inside.</p></div>
+  </div>
+  <div class="pilot rise">
+    <div><div class="mono" style="color:var(--espresso)">Free 30-day pilot</div><h3>Try it in one property before you commit.</h3>
+    <p>We send 300 shots and a short how-to for your team. You track how fast they go.</p></div>
+    <ol><li>Tell us your property and room count.</li><li>We deliver the pilot kit within a week.</li><li>After 30 days, we agree to a monthly order.</li></ol>
+  </div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="in">
+  <div class="head rise"><div class="mono" style="color:var(--hl)">Questions</div><h2>Good to know.</h2></div>
+  <div class="faq">
+    <details><summary>What's inside a shot?</summary><p>The coffee shot is cold brew concentrate made from 100% Arabica coffee and water. The masala chai and iced tea shots are tea concentrates. Full ingredients and caffeine details for each are on our spec sheet.</p></details>
+    <details><summary>Does it need a fridge?</summary><p>We share storage and shelf-life details on the spec sheet for each batch, so your team knows exactly how to stock it.</p></details>
+    <details><summary>Hot or cold?</summary><p>Both. Use the coffee or chai shot in hot milk or water for a hot drink, or pour any shot over ice for a cold one.</p></details>
+    <details><summary>Can we put our hotel's name on the pack?</summary><p>Yes. Once a property orders regularly, we can print your brand on the pack and box. Ask us for the minimum quantity.</p></details>
+    <details><summary>Where do you deliver?</summary><p>We start with Mumbai, Lonavala, Alibaug and Karjat, and can ship further for larger orders.</p></details>
+  </div>
+</div></section>
+
+<section class="contact" id="contact">
+  <div class="ghostword" aria-hidden="true">onlysnaps</div>
+  <div class="in">
+    <div class="mono" style="color:var(--crema)">Let's talk</div>
+    <h2>Put café drinks <em>in every room.</em></h2>
+    <p>Write to us with your property name and room count, and we'll send a sample kit and the spec sheet.</p>
+    <div class="mailrow"><span class="mailbox" id="mail">hello@onlysnaps.in</span><button class="btn crema" id="copy" type="button">Copy email</button><span class="copied" id="copied" aria-live="polite"></span></div>
+  </div>
+</section>
+<footer><div class="in"><span>© 2026 onlysnaps · Made in India</span><span>Arabica cold brew · Masala chai · Iced tea</span></div></footer>
+
+<script>
+(function(){
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* snap pack drawing, used by the hero (auto) and the try-it demo (manual) */
+const snapSVG=p=>`<span class="sv"><svg viewBox="0 0 400 572" role="img" aria-label="A silver sachet tilts over a glass of cold water and ice, folds in half and pours; the drink changes colour and is ready">
+<defs><linearGradient id="${p}mix" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--m1)"/><stop offset="1" style="stop-color:var(--m2)"/></linearGradient>
+<linearGradient id="${p}ice" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".45"/><stop offset="1" stop-color="#FFFFFF" stop-opacity=".8"/></linearGradient>
+<linearGradient id="${p}gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".18" stop-color="#FFFFFF" stop-opacity=".05"/><stop offset=".82" stop-color="#FFFFFF" stop-opacity=".05"/><stop offset="1" stop-color="#FFFFFF" stop-opacity=".4"/></linearGradient>
+<clipPath id="${p}clip"><path d="M112 300 L288 300 L268 512 Q266 524 254 524 L146 524 Q134 524 132 512 Z"/></clipPath></defs>
+<ellipse cx="200" cy="531" rx="112" ry="8" fill="#000000" opacity=".16"/>
+<g clip-path="url(#${p}clip)"><rect x="100" y="338" width="200" height="200" style="fill:var(--base)"/>
+<rect class="mixed" x="100" y="338" width="200" height="200" fill="url(#${p}mix)" fill-opacity=".93"/>
+<ellipse class="plume" cx="204" cy="346" rx="24" ry="13" style="fill:var(--l1)"/>
+<rect class="ice" x="136" y="322" width="46" height="44" rx="8" fill="url(#${p}ice)" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="1.5" transform="rotate(-8 159 344)"/>
+<rect class="ice b" x="198" y="330" width="50" height="46" rx="9" fill="url(#${p}ice)" stroke="#FFFFFF" stroke-opacity=".9" stroke-width="1.5" transform="rotate(10 223 353)"/>
+<rect class="ice c" x="160" y="372" width="40" height="38" rx="7" fill="url(#${p}ice)" stroke="#FFFFFF" stroke-opacity=".85" stroke-width="1.5" transform="rotate(-14 180 391)"/>
+<ellipse cx="200" cy="338" rx="92" ry="5" fill="#FFFFFF" opacity=".35"/></g>
+<path d="M108 292 L292 292 L270 514 Q267 530 252 530 L148 530 Q133 530 130 514 Z" fill="url(#${p}gl)" stroke="#000000" stroke-opacity=".45" stroke-width="2" stroke-linejoin="round"/>
+<ellipse cx="200" cy="292" rx="92" ry="5" fill="none" stroke="#000000" stroke-opacity=".3" stroke-width="1.5"/>
+<path d="M134 512 Q136 524 148 524 L252 524 Q264 524 266 512 Z" fill="#FFFFFF" opacity=".4"/>
+<path d="M124 306 L140 500" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<g class="steam" fill="none" stroke="#000000" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"><path d="M160 282 q-9 -12 0 -24 t0 -24"/><path d="M240 284 q9 -12 0 -24 t0 -24"/><path d="M130 286 q-8 -10 0 -20 t0 -20"/></g>
+<path class="stream" d="M200 168 C 200 230, 204 290, 204 342"/>
+<text class="lbl pourlbl" x="220" y="268">POURS FROM THE FOLD</text>
+<g class="foldlbl"><text class="lbl" x="200" y="56" text-anchor="middle">FOLD ALONG THIS LINE</text><path d="M200 62 v14 m-5 -6 l5 6 l5 -6" style="stroke:var(--ink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text class="lbl st before" x="200" y="560" text-anchor="middle">COLD WATER + ICE</text><text class="lbl st after" x="200" y="560" text-anchor="middle">READY TO DRINK</text>
+</svg><span class="stage"><span class="rig"><span class="hf l"><b class="lg">onlysnaps</b><span class="fx"></span></span><span class="hf r"><span class="stk"><b class="pname">Cold<br>Brew</b><span class="sm psub">COFFEE SHOT</span></span><span class="fx"></span></span><span class="crease"></span></span></span></span>`;
+document.getElementById('scene').innerHTML=snapSVG('h');
+const demo=document.getElementById('demoviz'),sbtn=document.getElementById('snapbtn');
+demo.innerHTML=snapSVG('d');
+document.querySelectorAll('.pack').forEach(k=>k.insertAdjacentHTML('beforeend','<i class="fx"></i>'));
+const FL={cold:{acc:'#B9A2FF',l1:'#2E1A0F',m1:'#7A4E30',m2:'#3E2415',base:'#D9E9F1',nm:'Cold<br>Brew',sub:'COFFEE SHOT',before:'COLD WATER + ICE',hot:false},
+  chai:{acc:'#9BEA5C',l1:'#6B3A1C',m1:'#D6AB7E',m2:'#BC8B5C',base:'#F6F3EC',nm:'Masala<br>Chai',sub:'CHAI SHOT',before:'HOT MILK',hot:true},
+  tea:{acc:'#58BDF5',l1:'#8A3E10',m1:'#DE9440',m2:'#B9631C',base:'#D9E9F1',nm:'Iced<br>Tea',sub:'TEA SHOT',before:'COLD WATER + ICE',hot:false}};
+let snapped=false,pt;
+function setSnap(v){snapped=v;clearTimeout(pt);demo.classList.toggle('snapped',v);demo.classList.toggle('pouring',v);
+  if(v)pt=setTimeout(()=>demo.classList.remove('pouring'),2900);
+  sbtn.textContent=v?'Reset the pack':'Snap it';demo.setAttribute('aria-label',v?'Reset the pack':'Snap the pack open')}
+demo.addEventListener('click',()=>setSnap(!snapped));sbtn.addEventListener('click',()=>setSnap(!snapped));
+document.querySelectorAll('.flchips button').forEach(b=>b.addEventListener('click',()=>{const f=FL[b.dataset.f];
+  ['acc','l1','m1','m2','base'].forEach(k=>demo.style.setProperty('--'+k,f[k]));demo.classList.toggle('hot',f.hot);demo.querySelector('.st.before').textContent=f.before;
+  demo.querySelector('.pname').innerHTML=f.nm;demo.querySelector('.psub').textContent=f.sub;
+  document.querySelectorAll('.flchips button').forEach(x=>x.setAttribute('aria-pressed',x===b));setSnap(false)}));
+
+/* marquee */
+const words=['ONE HAND','NO TEARING','FOLD','SNAP','POUR','COLD BREW','MASALA CHAI','ICED TEA','MADE IN INDIA'];
+const mq=document.getElementById('mq');
+const half=words.map(w=>`<span>${w}<i></i></span>`).join('');
+mq.innerHTML=half+half;
+
+/* floating beans & ice in hero */
+const fl=document.getElementById('floaters');
+const bean=(c)=>`<svg width="44" height="58" viewBox="0 0 44 58"><ellipse cx="22" cy="29" rx="19" ry="26" fill="${c}"/><path d="M22 5 C 12 20, 32 38, 22 53" stroke="#FFFFFF" stroke-width="3" fill="none" opacity=".5"/></svg>`;
+const cube=`<svg width="46" height="46" viewBox="0 0 46 46"><rect x="3" y="3" width="40" height="40" rx="10" fill="#FFFFFF" stroke="#D3D6CC" stroke-width="3"/><path d="M12 12 L20 12" stroke="#D3D6CC" stroke-width="3" stroke-linecap="round"/></svg>`;
+const bits=[];
+bits.forEach(([x,y,svg,r,d],i)=>{const el=document.createElement('div');el.className='fl';el.style.left=x+'%';el.style.top=y+'%';el.style.setProperty('--r',r+'deg');el.style.animationDelay=d;el.style.animationDuration=(5+i%3)+'s';el.dataset.depth=(0.4+(i%3)*0.3);el.innerHTML=svg;fl.appendChild(el)});
+if(!reduce){
+  const hero=document.querySelector('.hero');const scene=document.getElementById('scene');
+  hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();const dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
+    fl.querySelectorAll('.fl').forEach(el=>{const k=+el.dataset.depth*40;el.style.translate=`${-dx*k}px ${-dy*k}px`});
+    scene.style.transform=`rotateY(${dx*8}deg) rotateX(${-dy*6}deg)`});
+  hero.addEventListener('pointerleave',()=>{scene.style.transform='';fl.querySelectorAll('.fl').forEach(el=>el.style.translate='')});
+  scene.style.transition='transform .3s ease';hero.style.perspective='1200px';
+}
+
+/* reveal: elements are visible at rest; only slide up when they enter */
+if(!reduce && 'IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{threshold:.15});
+  document.querySelectorAll('.rise').forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add('pre');io.observe(el)}});
+  /* count up */
+  const nio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;nio.unobserve(e.target);const b=e.target,to=+b.dataset.to,suf=b.dataset.suf||'';if(!to)return;const t0=performance.now();
+    const step=t=>{const p=Math.min(1,(t-t0)/1100);b.textContent=Math.round(to*(1-Math.pow(1-p,3)))+suf;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}),{threshold:.6});
+  document.querySelectorAll('.num b').forEach(b=>nio.observe(b));
+}
+
+/* scroll-driven big word */
+const big=document.getElementById('bigslide');
+if(!reduce){let ticking=false;const upd=()=>{const r=big.getBoundingClientRect();const p=(innerHeight-r.top)/(innerHeight+r.height);big.style.transform=`translateX(${-p*40}%)`;ticking=false};
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(upd)}},{passive:true});upd();}
+
+/* card tilt */
+if(!reduce)document.querySelectorAll('.tilt').forEach(c=>{
+  c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(900px) rotateY(${x*10}deg) rotateX(${-y*10}deg)`});
+  c.addEventListener('pointerleave',()=>c.style.transform='')});
+
+/* contour hills canvas */
+const cv=document.getElementById('hills'),ctx=cv.getContext('2d');let W,H,t=0;
+function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=cv.width=r.width*d;H=cv.height=r.height*d}
+size();addEventListener('resize',size);
+const COL={};function readCols(){const cs=getComputedStyle(document.documentElement);COL.bg=cs.getPropertyValue('--cobalt').trim();COL.ac=cs.getPropertyValue('--crema').trim();COL.ink=cs.getPropertyValue('--ink').trim()}readCols();
+function draw(){ctx.fillStyle=COL.bg;ctx.fillRect(0,0,W,H);
+  const lines=18;for(let i=0;i<lines;i++){const base=H*(.22+i*.045);ctx.beginPath();
+    for(let x=0;x<=W;x+=W/80){const n=Math.sin(x/W*6+i*.5+t)*H*.035+Math.sin(x/W*13-i*.3+t*1.3)*H*.015+Math.cos(x/W*3+i)*H*.05;ctx.lineTo(x,base+n)}
+    ctx.strokeStyle=i%4===0?COL.ac:'rgba(255,255,255,.42)';ctx.lineWidth=(i%4===0?2.4:1.4)*(W/400);ctx.stroke()}
+  // estate pins
+  [[.32,.5],[.68,.62]].forEach(([px,py],k)=>{const x=W*px,y=H*py+Math.sin(t*2+k)*H*.01;ctx.fillStyle=COL.ac;ctx.beginPath();ctx.arc(x,y,W*.022,0,7);ctx.fill();ctx.strokeStyle=COL.ink;ctx.lineWidth=W/160;ctx.stroke();
+    ctx.fillStyle='#FFFFFF';ctx.font=`600 ${W*.04}px DM Mono, monospace`;ctx.fillText(k?'COORG':'CHIKMAGALUR',x+W*.035,y+W*.012)});
+  t+=.008;if(!reduce&&!mapOn)requestAnimationFrame(draw)}
+let mapOn=false;draw();
+/* real map of India (state outlines from the @svg-maps/india package); the contour drawing above stays as the fallback */
+(async()=>{try{const m=(await import('https://cdn.jsdelivr.net/npm/@svg-maps/india@2.0.0/+esm')).default;
+  const pins=[['CHIKMAGALUR',159.3,556,548],['COORG',158.4,575.5,594],['MUMBAI',98.7,429.6,424]];
+  const svg=`<svg viewBox="-100 -8 724 712" role="img" aria-label="Map of India with Karnataka highlighted for coffee, marking Chikmagalur and Coorg, Assam highlighted for tea, and Mumbai">`+
+    m.locations.map(l=>`<path class="st8${l.id==='ka'?' ka':l.id==='as'?' as':''}" data-id="${l.id}" d="${l.path}"><title>${l.name}</title></path>`).join('')+
+    `<path class="route" d="M158.4 575.5 L159.3 556 Q 132 486 98.7 429.6"/>`+
+    pins.map(([n,x,y,ly])=>`<path class="lead" d="M${x-7} ${y} L96 ${ly-5}"/><text class="maplbl" x="90" y="${ly}" text-anchor="end">${n}</text><circle class="ring" cx="${x}" cy="${y}" r="5"/><circle class="pin" cx="${x}" cy="${y}" r="5"/>`).join('')+`</svg>`;
+  mapOn=true;cv.remove();const tg=document.getElementById('hilltag');if(tg)tg.remove();
+  document.querySelector('.hills').insertAdjacentHTML('afterbegin',svg);
+  const ms=document.querySelector('.hills svg'),A=ms.querySelector('[data-id="as"]').getBBox(),Z=ms.querySelector('[data-id="mz"]').getBBox();
+  const ax=A.x+A.width*.71,ay=A.y+A.height*.32,ly=Z.y+Z.height+30;
+  ms.insertAdjacentHTML('beforeend',`<path class="route" d="M${ax} ${ay} Q ${(ax+98.7)/2} ${ay-70} 98.7 429.6"/><path class="lead" d="M${ax} ${ay+7} L${ax} ${ly-16}"/><text class="maplbl" x="${ax}" y="${ly}" text-anchor="middle">ASSAM</text><circle class="ring" cx="${ax}" cy="${ay}" r="5"/><circle class="pin" cx="${ax}" cy="${ay}" r="5"/>`);
+}catch(e){}})();
+
+/* copy email */
+const btn=document.getElementById('copy'),msg=document.getElementById('copied'),mail=document.getElementById('mail');
+btn.addEventListener('click',()=>{const done=()=>{msg.textContent='Copied';setTimeout(()=>msg.textContent='',2000)};
+  try{navigator.clipboard.writeText(mail.textContent).then(done,()=>{sel();msg.textContent='Selected, press Ctrl+C'})}catch(e){sel();msg.textContent='Selected, press Ctrl+C'}});
+function sel(){const r=document.createRange();r.selectNodeContents(mail);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+})();
+</script>
+
+</body>
+</html>
