@@ -223,6 +223,7 @@ section{position:relative}
 .pilot h3{font-size:clamp(1.5rem,3vw,2.3rem);font-weight:800;color:var(--espresso)}
 .pilot p{color:var(--espresso);margin-top:10px}
 .pilot ol{margin:0;padding-left:20px;display:grid;gap:10px;color:var(--espresso);font-weight:500}
+.pilot.alt{background:var(--cobalt)}
 .pilot ol li::marker{font-family:var(--f-display);font-weight:800}
 
 /* faq */
@@ -243,9 +244,69 @@ section{position:relative}
 .mailrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .mailbox{font-family:var(--f-mono);font-size:1.05rem;padding:14px 18px;border-radius:999px;border:2px solid rgba(255,255,255,.25);user-select:all;background:rgba(255,255,255,.06)}
 .copied{font-family:var(--f-mono);font-size:.8rem;color:var(--crema)}
-.contact .ghostword{-webkit-text-stroke:2px rgba(255,255,255,.1);bottom:-1vw;font-size:clamp(3rem,13vw,11rem)}
-footer{background:var(--ink);color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.12)}
-footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding-block:26px;font-size:.9rem}
+.contact .ghostword{-webkit-text-stroke:2px rgba(255,255,255,.14);bottom:-1vw;font-size:clamp(3rem,13vw,11rem);--gf:#B9A2FF;background:linear-gradient(to top,color-mix(in srgb,var(--gf) 30%,transparent) 50%,transparent 50%) 0 0/100% 200% no-repeat;-webkit-background-clip:text;background-clip:text;transition:background-position .9s ease}
+.contact .ghostword.full{background-position:0 100%}
+.contact .in{grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);column-gap:40px;align-items:center}
+.contact .in > *{grid-column:1}
+.contact h2 .rot{display:block;height:1.08em;overflow:hidden;color:var(--crema)}
+.contact h2 .rot i{display:block;font-style:normal;animation:rot 12.5s cubic-bezier(.7,0,.2,1) infinite}
+.contact h2 .rot i span{display:block;height:1.08em;line-height:1.08em}
+@keyframes rot{0%,16%{transform:translateY(0)}20%,36%{transform:translateY(-1.08em)}40%,56%{transform:translateY(-2.16em)}60%,76%{transform:translateY(-3.24em)}80%,96%{transform:translateY(-4.32em)}100%{transform:translateY(-5.4em)}}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fan{grid-column:2!important;grid-row:1 / span 4;position:relative;width:100%;height:420px;perspective:1100px}
+.fan .fp{position:absolute;left:50%;top:44%;width:250px;height:160px;margin:-80px 0 0 -125px;display:flex;transition:transform .8s cubic-bezier(.5,0,.2,1),opacity .8s,filter .8s;transform-style:preserve-3d}
+.fan .fp .h{flex:1;border-radius:18px 0 0 18px;background:linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.45) 46%,rgba(255,255,255,0) 60%) 0 0/250% 100%,radial-gradient(120% 100% at 40% 25%,rgba(255,255,255,.35),rgba(0,0,0,.12)),var(--c);color:#0E0E10;padding:16px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .45s cubic-bezier(.3,1.5,.5,1);transform-origin:right center;box-shadow:inset 0 2px 0 rgba(255,255,255,.4);animation:gloss 4.5s ease-in-out infinite}
+.fan .fp .h.r{border-radius:0 18px 18px 0;transform-origin:left center;border-left:2px dashed rgba(14,14,16,.45)}
+.fan .fp b{font-family:var(--f-display);font-weight:900;font-size:1.45rem;line-height:.95;letter-spacing:-.02em}
+.fan .fp small{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase}
+.fan .fp .lg{font-family:var(--f-display);font-weight:800;font-size:.95rem;letter-spacing:-.03em}
+@keyframes gloss{0%,100%{background-position:100% 0,0 0,0 0}50%{background-position:0 0,0 0,0 0}}
+.fan .fp[data-pos="0"]{transform:translate3d(0,0,60px) rotate(-6deg);z-index:3}
+.fan .fp[data-pos="1"]{transform:translate3d(70px,-70px,-40px) rotate(9deg);z-index:2;filter:brightness(.7)}
+.fan .fp[data-pos="2"]{transform:translate3d(-80px,-110px,-120px) rotate(-14deg);z-index:1;filter:brightness(.5)}
+.fan .fp.snap .h.l{transform:rotateY(38deg)}
+.fan .fp.snap .h.r{transform:rotateY(-38deg)}
+.fan .stream{position:absolute;left:50%;top:calc(44% + 70px);bottom:20px;width:8px;margin-left:-4px;border-radius:4px;background:var(--sc,#B9A2FF);z-index:3;transform:scaleY(0);transform-origin:top;transition:transform .5s ease-in}
+.fan .stream.on{transform:scaleY(1)}
+.fan .glass{position:absolute;left:50%;bottom:6px;width:96px;height:110px;margin-left:-48px;border:3px solid rgba(255,255,255,.55);border-top:none;border-radius:6px 6px 22px 22px;overflow:hidden;z-index:4}
+.fan .glass i{position:absolute;left:0;right:0;bottom:0;height:var(--lv,22%);background:var(--sc,#B9A2FF);transition:height .9s ease,background .6s}
+.fan .glass i::after{content:"";position:absolute;left:-10%;right:-10%;top:-6px;height:12px;border-radius:50%;background:inherit;filter:brightness(1.15)}
+.fan .glass em{position:absolute;left:14px;bottom:30%;width:22px;height:22px;border-radius:5px;background:rgba(255,255,255,.35);transform:rotate(18deg);z-index:1}
+.fan .cap{position:absolute;right:0;top:0;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--crema)}
+.burst{position:fixed;width:10px;height:10px;border-radius:50% 50% 50% 0;pointer-events:none;z-index:50}
+@media (max-width:1000px){.contact .in{grid-template-columns:minmax(0,1fr)}.fan{grid-column:1!important;grid-row:auto;height:380px;justify-self:stretch}}
+@media (max-width:520px){.fan{height:330px}.fan .fp{transform-origin:center;scale:.82}}
+@media (prefers-reduced-motion:reduce){.contact .ghostword{transition:none}.contact h2 .rot i,.fan .fp .h{animation:none}.fan .fp,.fan .fp .h,.fan .stream,.fan .glass i{transition:none}}
+.foot{background:var(--ink);color:rgba(255,255,255,.62);border-top:1px solid rgba(255,255,255,.12);overflow:hidden}
+.foot a{color:inherit;text-decoration:none}
+.foot a:hover,.foot a:focus-visible{color:var(--milk)}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr 1fr;gap:32px;padding-block:64px 24px}
+.fgrid h4{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--crema);margin:0 0 14px;font-weight:500}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:.95rem}
+.fgrid .tag{font-family:var(--f-display);font-weight:800;font-size:clamp(1.5rem,2.6vw,2rem);line-height:1.05;color:var(--milk);letter-spacing:-.02em;margin:0 0 14px}
+.fgrid .tag em{font-style:normal;color:var(--cobalt)}
+.fgrid .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.fmail{font-family:var(--f-mono);font-size:.9rem;color:var(--milk);word-break:break-all}
+.bigsnap{all:unset;box-sizing:border-box;display:flex;justify-content:center;align-items:flex-end;width:100%;cursor:pointer;padding:18px 0 .22em;perspective:1600px;position:relative;font-family:var(--f-display);font-weight:900;font-size:min(15.2vw,14.5rem);line-height:.82;letter-spacing:-.045em;user-select:none;-webkit-tap-highlight-color:transparent}
+.bigsnap:focus-visible{outline:2px dashed var(--cobalt);outline-offset:6px}
+.bigsnap .half{display:inline-block;transition:transform .55s cubic-bezier(.3,1.6,.5,1),color .3s}
+.bigsnap .l{color:var(--milk);transform-origin:right center}
+.bigsnap .r{color:var(--cobalt);transform-origin:left center}
+.bigsnap .seam{align-self:stretch;width:0;margin:0 .04em;border-left:.03em dashed rgba(255,255,255,.45);position:relative;transition:border-color .3s}
+.bigsnap .drop{position:absolute;left:50%;top:38%;width:.11em;height:.11em;margin-left:-.055em;border-radius:50% 50% 50% 0;transform:rotate(-45deg) scale(0);background:var(--drop,var(--cobalt));opacity:0}
+.bigsnap .puddle{position:absolute;left:50%;bottom:-.16em;width:.6em;height:.06em;margin-left:-.3em;border-radius:50%;background:var(--drop,var(--cobalt));transform:scaleX(0);opacity:0}
+.bigsnap.snapped .l{transform:rotateY(22deg) translateX(-.03em)}
+.bigsnap.snapped .r{transform:rotateY(-22deg) translateX(.03em)}
+.bigsnap.snapped .seam{border-color:var(--drop,var(--cobalt))}
+.bigsnap.snapped .drop{animation:fdrop .9s .25s cubic-bezier(.5,0,.9,.6) forwards}
+.bigsnap.snapped .puddle{animation:fpud 1s .9s ease-out forwards}
+@keyframes fdrop{0%{opacity:1;transform:translateY(0) rotate(-45deg) scale(.4)}20%{opacity:1;transform:translateY(0) rotate(-45deg) scale(1)}92%{opacity:1}100%{opacity:0;transform:translateY(.62em) rotate(-45deg) scale(1)}}
+@keyframes fpud{0%{opacity:1;transform:scaleX(.1)}60%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1.3)}}
+.fbase{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;padding-block:22px 28px;font-size:.85rem;border-top:1px solid rgba(255,255,255,.12);margin-top:22px}
+.fbase .hint{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--crema)}
+@media (max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.fgrid{grid-template-columns:1fr;padding-block:48px 16px}}
+@media (prefers-reduced-motion:reduce){.bigsnap .half{transition:none}.bigsnap.snapped .drop,.bigsnap.snapped .puddle{animation:none}}
 
 /* realistic sachet: glossy film, crimped end seals, folds in real 3D */
 .snapviz{container-type:inline-size;--pk:#1C1512;--acc:#D99A5B}
@@ -456,11 +517,10 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
 </style>
 </head>
 <body>
-
 <header class="top"><div class="in">
   <a class="logo" href="#home" aria-label="onlysnaps home"><span class="mark" aria-hidden="true"></span><span>only<b>snaps</b></span></a>
   <nav class="links" aria-label="Main">
-    <a href="#pack">The pack</a><a href="#how">How to use</a><a href="#flavours">Flavours</a><a href="#hotels">For hotels</a>
+    <a href="#pack">The pack</a><a href="#how">How to use</a><a href="#flavours">Flavours</a><a href="#hotels">For hotels</a><a href="#offices">For offices</a>
   </nav>
   <a class="btn" href="#contact">Start a pilot</a>
 </div></header>
@@ -473,7 +533,7 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
       <div class="mono" style="color:var(--hl);margin-bottom:18px">The one-hand snap pack</div>
       <h1><span class="w">Don't tear.</span> <span class="w"><em>Just <span class="squig">snap.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 14 Q 30 2 60 12 T 120 10 T 198 8"/></svg></span></em></span></h1>
       <p class="lede">onlysnaps is a single-serve pack that opens with one hand. Fold it in half and it pours a clean shot of cold brew, masala chai or iced tea into your glass.</p>
-      <div class="ctas"><a class="btn" href="#pack">See how the pack works</a><a class="btn ghost" href="#hotels">For hotels &amp; stays</a></div>
+      <div class="ctas"><a class="btn" href="#pack">See how the pack works</a><a class="btn ghost" href="#hotels">For hotels</a><a class="btn ghost" href="#offices">For offices</a></div>
       <div class="chips"><span class="chip">One hand</span><span class="chip">No scissors</span><span class="chip">No sticky fingers</span></div>
     </div>
     <div><div class="scene snapviz auto" id="scene"></div><ol class="demo-steps" aria-label="How the pack opens"><li>Hold it flat</li><li>Fold in half</li><li>It pours</li></ol></div>
@@ -537,14 +597,14 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
     </div>
     <div class="card tilt rise">
       <div class="pack chai"><span class="lg">onlysnaps</span><span><span class="nm">Masala<br>Chai</span><br><span class="sm">Chai shot</span></span></div>
-      <div><h3>Masala Chai</h3><div class="notes"><span>Black tea</span><span>Warm spices</span><span>Desi classic</span></div>
-      <p>A strong spiced chai concentrate. Stir into hot milk for cutting chai, or over cold milk and ice for iced chai.</p>
+      <div><h3>Masala Chai</h3><div class="notes"><span>Assam black tea</span><span>Warm spices</span><span>Desi classic</span></div>
+      <p>A strong spiced chai concentrate made with Assam black tea. Stir into hot milk for cutting chai, or over cold milk and ice for iced chai.</p>
       <div class="best">Best with: <b>hot milk</b></div></div>
     </div>
     <div class="card tilt rise">
       <div class="pack tea"><span class="lg">onlysnaps</span><span><span class="nm">Iced<br>Tea</span><br><span class="sm">Tea shot</span></span></div>
-      <div><h3>Iced Tea</h3><div class="notes"><span>Black tea</span><span>Refreshing</span><span>Summer-ready</span></div>
-      <p>A bright tea concentrate. Pour into cold water with ice for a glass of iced tea in seconds.</p>
+      <div><h3>Iced Tea</h3><div class="notes"><span>Assam black tea</span><span>Refreshing</span><span>Summer-ready</span></div>
+      <p>A bright concentrate of Assam black tea. Pour into cold water with ice for a glass of iced tea in seconds.</p>
       <div class="best">Best with: <b>cold water + ice</b></div></div>
     </div>
   </div></div>
@@ -554,12 +614,13 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
   <div class="hills"><canvas id="hills" aria-label="Animated contour lines of the Western Ghats hills"></canvas><span class="tag" id="hilltag">Chikmagalur · Coorg</span><span class="tag tag2"><i style="background:var(--cobalt)"></i>Coffee · Karnataka</span><span class="tag tag3"><i style="background:#58BDF5"></i>Tea · Assam</span></div>
   <div class="rise">
     <div class="mono" style="color:var(--hl)">Where it comes from</div>
-    <h2 style="font-size:clamp(2rem,4.4vw,3.4rem);font-weight:800;margin-top:12px">Grown in the hills that gave India its coffee.</h2>
-    <p style="color:var(--mute);font-size:1.12rem;margin-top:16px;max-width:52ch">Our coffee comes from shade-grown estates in the Western Ghats of Karnataka, and our tea comes from Assam. We cold brew the coffee slowly so the shot stays smooth and low in bitterness.</p>
+    <h2 style="font-size:clamp(2rem,4.4vw,3.4rem);font-weight:800;margin-top:12px">Coffee from the hills of Karnataka. Tea from the gardens of Assam.</h2>
+    <p style="color:var(--mute);font-size:1.12rem;margin-top:16px;max-width:52ch">Our coffee comes from shade-grown estates in the Western Ghats of Karnataka. Our tea comes from the tea gardens of Assam, in the Brahmaputra valley, known for strong, malty black tea. We cold brew the coffee slowly so the shot stays smooth and low in bitterness, and brew the tea strong so it holds up in milk or over ice.</p>
     <div class="facts">
       <div class="fact"><b>Coffee</b><span>100% Arabica. No Robusta blended in.</span></div>
       <div class="fact"><b>Coffee from</b><span>Chikmagalur and Coorg, Karnataka.</span></div>
-      <div class="fact"><b>Tea from</b><span>Assam, for the masala chai and iced tea shots.</span></div>
+      <div class="fact"><b>Tea</b><span>Assam black tea, strong and malty.</span></div>
+      <div class="fact"><b>Tea from</b><span>The tea gardens of Assam, for the masala chai and iced tea shots.</span></div>
       <div class="fact"><b>Method</b><span>Slow cold brew, then concentrated into a single shot.</span></div>
       <div class="fact"><b>Made</b><span>In India, from Indian-grown coffee and tea.</span></div>
     </div>
@@ -570,11 +631,11 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
   <div class="num rise"><b data-to="10">10</b><span>seconds from pack to glass</span></div>
   <div class="num rise"><b data-to="1">1</b><span>snap to open, no scissors</span></div>
   <div class="num rise"><b data-to="0">0</b><span>machines, baristas or cleanup</span></div>
-  <div class="num rise"><b data-to="100" data-suf="%">100%</b><span>Arabica, from Karnataka</span></div>
+  <div class="num rise"><b data-to="100" data-suf="%">100%</b><span>Arabica from Karnataka, tea from Assam</span></div>
 </div></section>
 
 <section class="band biz" id="hotels"><div class="in">
-  <div class="head rise"><div class="mono" style="color:var(--hl)">For hotels, villas &amp; offices</div><h2>A better coffee in every room, with no machine to install.</h2>
+  <div class="head rise"><div class="mono" style="color:var(--hl)">For hotels &amp; villas</div><h2>A better coffee in every room, with no machine to install.</h2>
   <p>Guests want café drinks in their room. onlysnaps gives them a cold brew, a masala chai or an iced tea in 10 seconds, and gives you a premium item for the minibar.</p></div>
   <div class="grid">
     <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="4" y="2" width="18" height="22" rx="3" fill="none" stroke="#2236F2" stroke-width="2.4"/><line x1="4" y1="10" x2="22" y2="10" stroke="#2236F2" stroke-width="2.4"/><line x1="8" y1="5" x2="8" y2="7" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Minibar</h3><p>Premium coffee, chai and tea shots next to the snacks. Easy to stock and easy to count.</p></div>
@@ -589,13 +650,30 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
   </div>
 </div></section>
 
+<section class="band biz" id="offices" style="padding-top:0"><div class="in">
+  <div class="head rise"><div class="mono" style="color:var(--hl)">For offices &amp; workplaces</div><h2>Café drinks in the pantry, with no barista on payroll.</h2>
+  <p>Teams queue for coffee, or walk out to buy it. onlysnaps puts a cold brew, a masala chai or an iced tea on every floor, ready in 10 seconds, with nothing to clean.</p></div>
+  <div class="grid">
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M4 9h14v7a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6z" fill="none" stroke="#2236F2" stroke-width="2.4"/><path d="M18 11h2a3 3 0 0 1 0 6h-2" fill="none" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Pantry</h3><p>A box of shots next to the water dispenser. Anyone can make a café drink at their desk.</p></div>
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="6" width="20" height="14" rx="2" fill="none" stroke="#2236F2" stroke-width="2.4"/><line x1="3" y1="11" x2="23" y2="11" stroke="#2236F2" stroke-width="2.4"/><line x1="9" y1="15" x2="17" y2="15" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Canteen counter</h3><p>A premium item your canteen can sell, with no machine and no wastage at closing time.</p></div>
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="5" width="20" height="13" rx="2" fill="none" stroke="#2236F2" stroke-width="2.4"/><line x1="9" y1="22" x2="17" y2="22" stroke="#2236F2" stroke-width="2.4"/><line x1="13" y1="18" x2="13" y2="22" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Meetings &amp; visitors</h3><p>Hand a client a cold brew in ten seconds, without sending someone out for coffee.</p></div>
+    <div class="use rise"><div class="ic"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="3" y="10" width="20" height="13" rx="2" fill="none" stroke="#2236F2" stroke-width="2.4"/><path d="M13 10v13M3 15h20M13 10c-2-6-8-6-7-2 1 2 7 2 7 2s6 0 7-2c1-4-5-4-7 2" fill="none" stroke="#2236F2" stroke-width="2.4"/></svg></div><h3>Gifting &amp; welcome kits</h3><p>Festive boxes, new-joiner kits and event giveaways, with your company's name on the pack.</p></div>
+  </div>
+  <div class="pilot alt rise">
+    <div><div class="mono" style="color:var(--espresso)">Free 30-day office pilot</div><h3>Try it on one floor before you commit.</h3>
+    <p>We send 300 shots for your pantry or canteen. You see how fast your team goes through them.</p></div>
+    <ol><li>Tell us your office location and team size.</li><li>We deliver the pilot kit within a week.</li><li>After 30 days, we agree to a monthly order.</li></ol>
+  </div>
+</div></section>
+
 <section class="band" style="padding-top:0"><div class="in">
   <div class="head rise"><div class="mono" style="color:var(--hl)">Questions</div><h2>Good to know.</h2></div>
   <div class="faq">
     <details><summary>What's inside a shot?</summary><p>The coffee shot is cold brew concentrate made from 100% Arabica coffee and water. The masala chai and iced tea shots are tea concentrates. Full ingredients and caffeine details for each are on our spec sheet.</p></details>
     <details><summary>Does it need a fridge?</summary><p>We share storage and shelf-life details on the spec sheet for each batch, so your team knows exactly how to stock it.</p></details>
     <details><summary>Hot or cold?</summary><p>Both. Use the coffee or chai shot in hot milk or water for a hot drink, or pour any shot over ice for a cold one.</p></details>
-    <details><summary>Can we put our hotel's name on the pack?</summary><p>Yes. Once a property orders regularly, we can print your brand on the pack and box. Ask us for the minimum quantity.</p></details>
+    <details><summary>Can we put our hotel's or company's name on the pack?</summary><p>Yes. Once a hotel or office orders regularly, we can print your brand on the pack and box. Ask us for the minimum quantity.</p></details>
+    <details><summary>Can our office canteen sell it?</summary><p>Yes. We can supply your canteen directly, or the catering company that runs it.</p></details>
     <details><summary>Where do you deliver?</summary><p>We start with Mumbai, Lonavala, Alibaug and Karjat, and can ship further for larger orders.</p></details>
   </div>
 </div></section>
@@ -604,12 +682,91 @@ footer .in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;pa
   <div class="ghostword" aria-hidden="true">onlysnaps</div>
   <div class="in">
     <div class="mono" style="color:var(--crema)">Let's talk</div>
-    <h2>Put café drinks <em>in every room.</em></h2>
-    <p>Write to us with your property name and room count, and we'll send a sample kit and the spec sheet.</p>
-    <div class="mailrow"><span class="mailbox" id="mail">hello@onlysnaps.in</span><button class="btn crema" id="copy" type="button">Copy email</button><span class="copied" id="copied" aria-live="polite"></span></div>
+    <h2>Café drinks in every <span class="rot" aria-hidden="true"><i><span>room.</span><span>office.</span><span>minibar.</span><span>pantry.</span><span>villa.</span><span>room.</span></i></span><span class="vh">room and every office.</span></h2>
+    <p>Write to us with your hotel and room count, or your office and team size, and we'll send a sample kit and the spec sheet.</p>
+    <div class="mailrow"><span class="mailbox" id="mail">contactonlysnaps@gmail.com</span><button class="btn crema" id="copy" type="button">Copy email</button><span class="copied" id="copied" aria-live="polite"></span></div>
+    <div class="fan" id="fan" aria-hidden="true">
+      <div class="fp" data-k="cold" style="--c:#B9A2FF"><div class="h l"><span class="lg">onlysnaps</span><small>15 ml shot</small></div><div class="h r"><b>Cold<br>Brew</b><small>Coffee shot</small></div></div>
+      <div class="fp" data-k="chai" style="--c:#9BEA5C"><div class="h l"><span class="lg">onlysnaps</span><small>15 ml shot</small></div><div class="h r"><b>Masala<br>Chai</b><small>Chai shot</small></div></div>
+      <div class="fp" data-k="tea" style="--c:#58BDF5"><div class="h l"><span class="lg">onlysnaps</span><small>15 ml shot</small></div><div class="h r"><b>Iced<br>Tea</b><small>Tea shot</small></div></div>
+      <div class="stream" id="fanstream"></div>
+      <div class="glass"><em></em><i id="fanliq"></i></div>
+      <span class="cap" id="fancap">Snap · pour · sip</span>
+    </div>
   </div>
 </section>
-<footer><div class="in"><span>© 2026 onlysnaps · Made in India</span><span>Arabica cold brew · Masala chai · Iced tea</span></div></footer>
+<script>
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cols=['#B9A2FF','#9BEA5C','#58BDF5'], names={cold:'Cold brew',chai:'Masala chai',tea:'Iced tea'};
+  const gw=document.querySelector('.contact .ghostword');
+  const fan=document.getElementById('fan');
+  if(fan){
+    const ps=[...fan.querySelectorAll('.fp')], st=document.getElementById('fanstream'), liq=document.getElementById('fanliq'), cap=document.getElementById('fancap');
+    let order=[0,1,2];
+    const place=()=>order.forEach((idx,pos)=>ps[idx].dataset.pos=pos);
+    place();
+    const front=()=>ps[order[0]];
+    const show=()=>{const f=front(),c=f.style.getPropertyValue('--c');fan.style.setProperty('--sc',c);liq.style.background=c;cap.textContent=names[f.dataset.k];};
+    show(); liq.style.setProperty('--lv','30%');
+    if(!reduce){
+      const step=()=>{
+        const f=front(); f.classList.add('snap');
+        setTimeout(()=>{st.classList.add('on');liq.style.setProperty('--lv','78%');if(gw){gw.style.setProperty('--gf',f.style.getPropertyValue('--c'));gw.classList.add('full');}cap.textContent=names[f.dataset.k]+' poured';},450);
+        setTimeout(()=>{st.classList.remove('on');},1700);
+        setTimeout(()=>{f.classList.remove('snap');order.push(order.shift());place();liq.style.setProperty('--lv','12%');if(gw)gw.classList.remove('full');setTimeout(show,350);},2400);
+      };
+      let timer=null;
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!timer){step();timer=setInterval(step,3400);}else if(!e.isIntersecting&&timer){clearInterval(timer);timer=null;}}),{threshold:.25});
+      io.observe(fan);
+    }
+  }
+  const cp=document.getElementById('copy');
+  if(cp&&!reduce&&document.body.animate){
+    cp.addEventListener('click',()=>{
+      const r=cp.getBoundingClientRect();
+      for(let k=0;k<16;k++){
+        const d=document.createElement('i');d.className='burst';d.style.background=cols[k%3];
+        d.style.left=(r.left+r.width/2-5)+'px';d.style.top=(r.top+r.height/2-5)+'px';document.body.appendChild(d);
+        const a=(Math.PI*2*k/16)+(Math.random()-.5)*.4, v=60+Math.random()*70;
+        d.animate([{transform:'translate(0,0) rotate(-45deg) scale(.6)',opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v-30}px) rotate(-45deg) scale(1)`,opacity:1,offset:.5},{transform:`translate(${Math.cos(a)*v*1.2}px,${Math.sin(a)*v+80}px) rotate(-45deg) scale(.4)`,opacity:0}],{duration:900+Math.random()*300,easing:'cubic-bezier(.2,.7,.4,1)'}).onfinish=()=>d.remove();
+      }
+    });
+  }
+})();
+</script>
+<footer class="foot">
+  <div class="in fgrid">
+    <div><p class="tag">Don't tear.<br><em>Just snap.</em></p><p>Single-serve shots of cold brew, masala chai and iced tea, in a pack that opens with one hand.</p></div>
+    <div><h4>Explore</h4><ul><li><a href="#pack">The pack</a></li><li><a href="#how">How to use</a></li><li><a href="#flavours">Flavours</a></li><li><a href="#hotels">For hotels</a></li><li><a href="#offices">For offices</a></li></ul></div>
+    <div><h4>The shots</h4><ul><li><span class="dot" style="background:var(--cobalt)"></span>Cold brew · Chikmagalur &amp; Coorg</li><li><span class="dot" style="background:var(--crema)"></span>Masala chai · Assam</li><li><span class="dot" style="background:#58BDF5"></span>Iced tea · Assam</li></ul></div>
+    <div><h4>Say hello</h4><ul><li class="fmail">contactonlysnaps@gmail.com</li><li>Mumbai, India</li><li><a href="#contact">Start a pilot →</a></li></ul></div>
+  </div>
+  <div class="in">
+    <button class="bigsnap" id="bigsnap" type="button" aria-label="Snap the onlysnaps wordmark"><span class="half l" aria-hidden="true">only</span><span class="seam" aria-hidden="true"><i class="drop"></i><i class="puddle"></i></span><span class="half r" aria-hidden="true">snaps</span></button>
+    <div class="fbase"><span>© 2026 onlysnaps · Made in India</span><span class="hint" id="snaphint">Tap the word to snap it</span><a href="#home">Back to top ↑</a></div>
+  </div>
+</footer>
+<script>
+(function(){
+  const b=document.getElementById('bigsnap'), hint=document.getElementById('snaphint');
+  if(!b) return;
+  const drinks=[['var(--cobalt)','Cold brew poured'],['var(--crema)','Masala chai poured'],['#58BDF5','Iced tea poured']];
+  let i=0, n=0, t;
+  const snap=()=>{
+    const [c,label]=drinks[i++%drinks.length];
+    b.style.setProperty('--drop',c);
+    b.classList.remove('snapped'); void b.offsetWidth; b.classList.add('snapped');
+    n++; hint.textContent=label+(n>1?' · '+n+' snaps':'');
+    clearTimeout(t); t=setTimeout(()=>b.classList.remove('snapped'),2200);
+  };
+  b.addEventListener('click',snap);
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){io.disconnect();setTimeout(snap,300);}})},{threshold:.6});
+    io.observe(b);
+  }
+})();
+</script>
 
 <script>
 (function(){
@@ -732,6 +889,5 @@ btn.addEventListener('click',()=>{const done=()=>{msg.textContent='Copied';setTi
 function sel(){const r=document.createRange();r.selectNodeContents(mail);const s=getSelection();s.removeAllRanges();s.addRange(r)}
 })();
 </script>
-
 </body>
 </html>
